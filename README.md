@@ -1,1 +1,3 @@
 # eaninjaGoogleCharts
+This project was to improve the charting visuals on a stock market tradelytics site(http://markets.eaninja.com/). 
+To do so, the Google Charts API was used in order to make graphs that could illustrate market and trader's performance data on all platforms. The current graphing API was not accessible on Macs. However, the Google Charts API is accessible for all browsers and computers that a client may use. Currently, the google Charts were written in html/js script. The code uses old data to make the graphs. Will use tokens to implement the live data and allow integration into the main website.
