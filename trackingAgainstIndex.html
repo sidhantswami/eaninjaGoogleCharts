@@ -1,0 +1,69 @@
+<html>
+  <head>
+      <script src="https://code.jquery.com/jquery-1.12.4.min.js"  ></script>
+
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(DrawBarChart);
+
+        function DrawBarChart()
+        {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "trackingAgainstIndex.csv",
+                    dataType: "text",
+                    success: function (data) { processData(data); }
+                });
+            });
+
+            function processData(allText) {
+                var allTextLines = allText.split(/\r\n|\n/);
+                var headers = allTextLines[0].split(',');
+                debugger;
+                var lines = [];
+                var col = [];
+                col.push('date','periodValue');
+                col.push('number', 'IndexTracking|Sim101');
+                col.push('number', 'Sim101');
+                lines.push(col);
+            
+                for (var i = 1; i < allTextLines.length; i++) {
+                    var data = allTextLines[i].split(',');
+                    var dataColumnArray = [];
+                    dataColumnArray.push(data[0]);
+                    dataColumnArray.push(parseFloat(data[1]));
+                    dataColumnArray.push(parseFloat(data[2]));
+                    lines.push(dataColumnArray);
+                }
+
+                var dataTable = google.visualization.arrayToDataTable(lines);
+                drawChart(dataTable);
+            }
+        }
+
+        function drawChart(data) {
+
+            var options = {
+                chart: {
+                title: 'Tracking Against Index',
+                },
+                width: 1222,
+                height: 254
+            };
+            var chart = new google.charts.Line(document.getElementById("columnchart_values"));
+            
+            chart.draw(data, google.charts.Line.convertOptions(options));
+
+        }
+
+
+</script>
+  </head>
+  <body>
+    <div id='columnchart_values'></div>
+  </body>
+</html>

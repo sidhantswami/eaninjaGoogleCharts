@@ -1,0 +1,71 @@
+<html>
+  <head>
+      <script src="https://code.jquery.com/jquery-1.12.4.min.js"  ></script>
+
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(DrawBarChart);
+
+        function DrawBarChart()
+        {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "winsloss.csv",
+                    dataType: "text",
+                    success: function (data) { processData(data); }
+                });
+            });
+
+            function processData(allText) {
+                var allTextLines = allText.split(/\r\n|\n/);
+                var headers = allTextLines[0].split(',');
+                debugger;
+                var lines = [];
+                var col = [];
+                col.push('date','Period');
+                col.push('number', 'Wins');
+                col.push({role:"style"});
+                col.push('number','Losses');
+                col.push({role:"style"});
+                lines.push(col);
+            
+                for (var i = 1; i < allTextLines.length; i++) {
+                    var data = allTextLines[i].split(',');
+                    var dataColumnArray = [];
+                    dataColumnArray.push(data[0]);
+                    dataColumnArray.push(data[1]);
+                    dataColumnArray.push('#3CB34D');
+                    ataColumnArray.push(data[2]);
+                     dataColumnArray.push('#E4194A')
+                    lines.push(dataColumnArray);
+                }
+
+                var dataTable = google.visualization.arrayToDataTable(lines);
+                drawChart(dataTable);
+            }
+
+        }
+
+        function drawChart(data) {
+
+            
+            var options = {
+                title: "Wins and Losses",
+                width: 1222,
+                height: 254,
+                bar: { groupWidth: "95%" },
+                legend: { position: "none" },
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(data, options);
+        }
+</script>
+  </head>
+  <body>
+    <div id='columnchart_values'></div>
+  </body>
+</html>
